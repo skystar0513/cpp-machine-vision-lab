@@ -1,49 +1,48 @@
-﻿// cpp.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
-
+﻿// anomaly map 생성
+//step_01
 #include <iostream>
-
-// 여기에 ThresholdImage 함수 작성
-void ThresholdImage(const unsigned char* image,
-    unsigned char* mask,
-    int width,
-    int height,
-    int threshold) {
-
-    for (int i = 0; i < width * height; i++) {
-        if (*(image + i)>= threshold) {
-            *(mask + i) = 255;
-        }
-        else
-            *(mask + i) = 0;
-    }
-
-}
+#include <random>
+#include <iomanip>
 
 int main()
 {
-    int width = 4;
-    int height = 3;
+    int width = 5;
+    int height = 5;
+    int size = width * height;
 
-    unsigned char image[12] = {
-        10,  20,  30,  40,
-        50,  60,  70,  80,
-        90, 100, 110, 120
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::uniform_real_distribution<float> dis(0.1f, 1.0f);
+
+    size_t memory = size * sizeof(float);
+    float* anomalymap = new float[size];
+
+    for (int i = 0;i < size;i++) {
+        anomalymap[i] = dis(gen);
     };
 
-    unsigned char mask[12] = { 0 };
 
-    ThresholdImage(image, mask, width, height, 80);
+
+    std::cout << "===== Anomaly Inspection =====" << std::endl;
+    std::cout << "Width      :" << width << std::endl;
+    std::cout << "Height     :" << height << std::endl;
+    std::cout << "Total Pixel  :"<< size << std::endl;
+    std::cout << "Memory Size   :"<< memory << std::endl;
+    std::cout << "===== Anomaly Map =====" << std::endl;
+    std::cout << std::fixed << std::setprecision(2);
+
+    for (int j = 0; j < size; j++) {
+
+        std::cout << anomalymap[j] << " ";
+        if ((j+1 )% width == 0) {
+            std::cout << '\n';
+        }
+    }
+
+
+    delete[] anomalymap;
+
 
     return 0;
 }
-
-// 프로그램 실행: Ctrl+F5 또는 디버그 > 디버깅하지 않고 시작 메뉴
-// 프로그램 디버그: F5 키 또는 디버그 > 디버깅 시작 메뉴
-
-// 시작을 위한 팁: 
-//   1. [솔루션 탐색기] 창을 사용하여 파일을 추가/관리합니다.
-//   2. [팀 탐색기] 창을 사용하여 소스 제어에 연결합니다.
-//   3. [출력] 창을 사용하여 빌드 출력 및 기타 메시지를 확인합니다.
-//   4. [오류 목록] 창을 사용하여 오류를 봅니다.
-//   5. [프로젝트] > [새 항목 추가]로 이동하여 새 코드 파일을 만들거나, [프로젝트] > [기존 항목 추가]로 이동하여 기존 코드 파일을 프로젝트에 추가합니다
-//   6. 나중에 이 프로젝트를 다시 열려면 [파일] > [열기] > [프로젝트]로 이동하고 .sln 파일을 선택합니다.
