@@ -17,10 +17,16 @@ int main()
 
     size_t memory = size * sizeof(float);
     float* anomalymap = new float[size];
+    unsigned char* mask = new unsigned char[size]; //unsigned char 형의 mask 동적 메모리 생성
+    size_t mask_memory = size * sizeof(unsigned char); //mask 메모리 사이즈 계산
 
     for (int i = 0;i < size;i++) {
         anomalymap[i] = dis(gen);
     };
+
+    for (int i = 0;i < size;i++) {
+        mask[i] = 0;
+    }; //마스크 초기화
 
 
 
@@ -40,7 +46,18 @@ int main()
         }
     }
 
+    std::cout << "===== Binary Mask =====" << std::endl;
+    std::cout << "Memory Size : " << mask_memory << " bytes" << std::endl;
 
+    for (int k = 0; k < size; k++) {
+
+        std::cout << static_cast<int>(mask[k]) << " ";
+        if ((k + 1) % width == 0) {
+            std::cout << '\n';
+        }
+    }
+
+    delete[] mask;
     delete[] anomalymap;
 
 
